@@ -12,7 +12,7 @@ Supported (and customizable) workflow:
 1)
 
                    sms: ABC.HELLO
-   USER PHONE    ------------------->   BROKER
+   USER PHONE    -------------------> MNO (Mobile Network Operator) ------> BROKER
 
 2)
 
