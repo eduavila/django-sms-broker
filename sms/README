@@ -1,0 +1,77 @@
+django-sms-broker
+=================
+
+Dead simple about
+-----------------
+
+Integrate easily with any number of SMS service providers (often called
+'brokers').
+
+Supported (and customizable) workflow:
+
+1)
+
+                   sms: ABC.HELLO
+   USER PHONE    ------------------->   BROKER
+
+2)
+
+                 notification: ABC.UNICORN
+                 from USER PHONE 1234
+                 sent to LA 567
+     YOUR APP <--------------------- BROKER
+
+
+3) YOUR APP runs any business logic on the received notification and returns
+success or 'I did not manage to fully handle the notification, please send me
+another one'.
+
+                   thank you!
+     YOUR APP  ---------------------> BROKER
+
+4) Purchase signal and handlers start to process the request and optionally
+send something back to the user.
+
+                [SMS/WAPPUSH] http://abc.com?hash to 1234              forward to MNO
+     YOUR APP  --------------------------------------------> BROKER --------------------> USER PHONE
+
+
+5) User activates the mobile link on his device and your application finishes the purchase.
+
+                 [GET] http://abc.com?hash
+    YOUR APP <-------------------------------- USER PHONE
+
+                   unicorn_wallpaper.jpg
+             --------------------------------->
+
+Please note that steps 4) and 5) are optional.
+
+
+
+How to install
+--------------
+
+1. Add 'sms' to INSTALLED_APPS
+2. Perform ./manage.py syncdb
+3. Implement ServiceProvider subclass (or inspect the example_provider.py)
+4. Configure ServiceProviderData model.
+   DummyProvider configuration is shown below:
+
+   >>> ServiceProviderData(slug = 'dummy', name = 'Dummy', module = \
+   'sms.DummyProvider').save()
+
+5. Run your application
+6. Add '567' Large Account via the admin interface (just for testing purposes).
+7. Test notification by navigating to:
+
+/sms/notfication/dummy?origin=1234&text=ABC.UNICORN&destination=567
+
+
+
+What's missing
+--------------
+
+* LargeAccounts should be optional
+* Data fixture for dummy setup
+* Improved docs (however, there are some in the source files)
+
